@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "outDir": "build",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
+    "noUnusedLocals": true,
+    "lib": ["es2020.string", "dom"]
+  },
+  "include": ["src/**/*.ts", "src/index.js"],
+  "exclude": ["__tests__", "src/**/__mocks__"]
+}

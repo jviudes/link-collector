@@ -1,0 +1,35 @@
+version: '3.6'
+services:
+  link_collector:
+    image: link_collector_node
+    volumes:
+      - ./:/api
+    command: bash -c "cd /api && npm i && npm run dev"
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - internal_network
+    environment:
+      - MONGO_ADDRESS_LINKS_DB=links_db:27017
+    depends_on:
+      - links_db
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1m'
+
+  links_db:
+    image: mongo
+    restart: always
+    networks:
+      - internal_network
+    volumes:
+      - ../databases/links_db:/data/db
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1m'
+
+networks:
+  internal_network:
