@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { MongoClient, FilterQuery, UpdateQuery, UpdateOneOptions } from 'mongodb';
 
 export default class Mongo {
@@ -12,7 +13,7 @@ export default class Mongo {
       this._connection = await MongoClient.connect(`mongodb://${this.dbAdress}`, { useUnifiedTopology: true });
       console.log('[DB] Connected');
     } catch (error) {
-      console.log('[DB] error', error);
+      console.log('[DB] Error', error);
     }
   }
 
@@ -21,9 +22,9 @@ export default class Mongo {
     return this._connection.db(dbName).collection(collectionName).insertOne(docs);
   }
 
-  async read(dbName: string, collectionName: string, query?: FilterQuery<any>) {
+  async read(dbName: string, collectionName: string, pipeline?: object[]) {
     if (!this._connection) await this.connect();
-    return this._connection.db(dbName).collection(collectionName).find(query).toArray();
+    return this._connection.db(dbName).collection(collectionName).aggregate(pipeline).toArray();
   }
 
   async update(
