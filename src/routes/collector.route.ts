@@ -1,5 +1,6 @@
 import * as express from 'express';
-import crall from '../utils/parser';
+import { crawCurl } from '../utils/parser';
+// import { dbLinks } from '../config';
 
 function handleCollector(): express.Router {
   const router = express.Router();
@@ -16,7 +17,12 @@ function handleGet(): express.RequestHandler {
       if (!req.query.url) {
         throw new Error('url query must me specified');
       }
-      const urls = await crall(<string>req.query.url);
+      const urls = await crawCurl(<string>req.query.url);
+      // for (const url of urls) {
+      //   console.log(url);
+      //   const test = await crall(<string>url);
+      //   console.log(test);
+      // }
       return res.status(200).send(urls);
     } catch (error) {
       return handleError(error, res);
