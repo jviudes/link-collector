@@ -11,7 +11,7 @@ services:
     networks:
       - internal_network
     environment:
-      - MONGO_ADDRESS_LINKS_DB=links_db:27017
+      - MONGO_ADDRESS_LINKS=links_db:27017
     depends_on:
       - links_db
     logging:
