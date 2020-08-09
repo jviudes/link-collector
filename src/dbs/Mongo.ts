@@ -1,0 +1,44 @@
+import { MongoClient, FilterQuery, UpdateQuery, UpdateOneOptions } from 'mongodb';
+
+export default class Mongo {
+  private _connection: MongoClient;
+  private _dbAdress: string;
+  constructor(dbAdress: string) {
+    this._dbAdress = dbAdress;
+  }
+
+  private async connect() {
+    try {
+      this._connection = await MongoClient.connect(`mongodb://${this._dbAdress}`, { useUnifiedTopology: true });
+      console.log('[DB] Connected');
+    } catch (error) {
+      console.log('[DB] error', error);
+    }
+  }
+
+  async create(dbName: string, collectionName: string, docs: any) {
+    if (!this._connection) await this.connect();
+    return this._connection.db(dbName).collection(collectionName).insertOne(docs);
+  }
+
+  async read(dbName: string, collectionName: string, query?: FilterQuery<any>) {
+    if (!this._connection) await this.connect();
+    return this._connection.db(dbName).collection(collectionName).find(query).toArray();
+  }
+
+  async update(
+    dbName: string,
+    collectionName: string,
+    filter: FilterQuery<any>,
+    update: UpdateQuery<any> | Partial<any>,
+    options?: UpdateOneOptions
+  ) {
+    if (!this._connection) await this.connect();
+    return this._connection.db(dbName).collection(collectionName).updateOne(filter, update, options);
+  }
+
+  async delete(dbName: string, collectionName: string, filter: FilterQuery<any>) {
+    if (!this._connection) await this.connect();
+    return this._connection.db(dbName).collection(collectionName).deleteOne(filter);
+  }
+}
