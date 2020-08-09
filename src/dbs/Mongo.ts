@@ -1,15 +1,15 @@
 import { MongoClient, FilterQuery, UpdateQuery, UpdateOneOptions } from 'mongodb';
 
 export default class Mongo {
-  private _connection: MongoClient;
-  private _dbAdress: string;
+  protected _connection: MongoClient;
+  protected dbAdress: string;
   constructor(dbAdress: string) {
-    this._dbAdress = dbAdress;
+    this.dbAdress = dbAdress;
   }
 
   private async connect() {
     try {
-      this._connection = await MongoClient.connect(`mongodb://${this._dbAdress}`, { useUnifiedTopology: true });
+      this._connection = await MongoClient.connect(`mongodb://${this.dbAdress}`, { useUnifiedTopology: true });
       console.log('[DB] Connected');
     } catch (error) {
       console.log('[DB] error', error);
