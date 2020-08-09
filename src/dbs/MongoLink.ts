@@ -12,7 +12,33 @@ export default class MongoLink extends Mongo {
     return this.create(this._dbName, this._collectionName, link);
   }
 
-  async getAll() {
-    return this.read(this._dbName, this._collectionName, {});
+  async readAllLinks() {
+    return this.read(this._dbName, this._collectionName, [
+      {
+        $match: {}
+      },
+      { $project: { _id: 0 } }
+    ]);
+  }
+
+  async readLinkUrl(url: string) {
+    return this.read(this._dbName, this._collectionName, [
+      {
+        $match: { url: url }
+      },
+      { $project: { url: 1 } }
+    ]);
+  }
+
+  async readLink(url: string) {
+    return this.read(this._dbName, this._collectionName, [
+      {
+        $match: { url: url }
+      }
+    ]);
+  }
+
+  async deleteLink(url: string) {
+    return this.delete(this._dbName, this._collectionName, { url: url });
   }
 }
