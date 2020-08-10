@@ -1,10 +1,9 @@
 version: '3.6'
 services:
   link_collector:
-    image: link_collector_node
+    build: ./
     volumes:
       - ./:/api
-    command: bash -c "cd /api && npm i && npm run dev"
     restart: always
     ports:
       - 3000:3000
