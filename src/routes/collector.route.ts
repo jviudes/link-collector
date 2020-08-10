@@ -21,7 +21,7 @@ function handleGet(): express.RequestHandler {
             url: req.query.url,
             links: [...urls.keys()]
           };
-          await dbLinks.createLink(document);
+          await dbLinks.createLink({ ...document });
           res.status(200).send(document);
           crawlBackground(document.links);
         } else {
