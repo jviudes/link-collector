@@ -1,6 +1,6 @@
 # link-collector service
 
-### Service receives a url, strips the html and finds all urls contained in it. After that follows the urls found in the first step.
+## Service receives a url, strips the html and finds all urls contained in it. After that follows the urls found in the first step.
 
 ## Run the project
 
