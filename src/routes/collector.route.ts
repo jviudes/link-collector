@@ -13,8 +13,8 @@ function handleGet(): express.RequestHandler {
   return async (req: express.Request, res: express.Response) => {
     try {
       if (req.query.url) {
-        const links = await dbLinks.readLinkUrl(<string>req.query.url);
-        if (links.length == 0) {
+        const linkHeader = await dbLinks.readLinkUrl(<string>req.query.url);
+        if (linkHeader.length == 0) {
           //if there is no link record on the database crawl that link
           const urls = await crawl(<string>req.query.url);
           const document = {
@@ -26,7 +26,8 @@ function handleGet(): express.RequestHandler {
           crawlBackground(document.links);
         } else {
           //else return link record
-          res.status(200).send(links);
+          const link = await dbLinks.readLink(<string>req.query.url);
+          res.status(200).send(link);
         }
       } else {
         //if no url is specified return all records
