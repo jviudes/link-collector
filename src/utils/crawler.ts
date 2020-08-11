@@ -2,10 +2,23 @@ import * as cheerio from 'cheerio';
 import { isUrlValid, isSubPath } from './validator';
 import { spawnSync } from 'child_process';
 
+function covertURL(url: string): string {
+  //if no protocol is set to url assing http
+  if (isUrlValid(url)) {
+    try {
+      const normalizedUrl = new URL(url);
+      return normalizedUrl.href;
+    } catch {
+      return 'http://' + url;
+    }
+  }
+  return url;
+}
+
 async function crawl(url: string) {
+  url = covertURL(url);
   const { stdout } = spawnSync('curl', [url]);
   const response = stdout.toString();
-
   const urlSet = new Set();
   if (response.length) {
     const html = response;
