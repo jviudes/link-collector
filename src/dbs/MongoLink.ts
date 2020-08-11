@@ -26,7 +26,7 @@ export default class MongoLink extends Mongo {
       {
         $match: { url: url }
       },
-      { $project: { url: 1 } }
+      { $project: { url: 1, _id: 0 } }
     ]);
   }
 
@@ -34,7 +34,8 @@ export default class MongoLink extends Mongo {
     return this.read(this._dbName, this._collectionName, [
       {
         $match: { url: url }
-      }
+      },
+      { $project: { _id: 0 } }
     ]);
   }
 
