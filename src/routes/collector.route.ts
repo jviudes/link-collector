@@ -14,7 +14,7 @@ function handleGet(): express.RequestHandler {
   return async (req: express.Request, res: express.Response) => {
     try {
       if (req.query.url) {
-        if (!isUrlValid(<string>req.query.url)) throw new Error('invalid url');
+        if (!isUrlValid(<string>req.query.url)) throw new Error('INVALID URL');
 
         const linkHeader = await dbLinks.readLinkUrl(<string>req.query.url);
         if (linkHeader.length === 0) {
@@ -50,7 +50,7 @@ function handleDelete(): express.RequestHandler {
         await dbLinks.deleteLink(<string>req.query.url);
         return res.status(204).send();
       } else {
-        throw new Error('url must be specified');
+        throw new Error('URL REQUIRED');
       }
     } catch (error) {
       return handleError(error, res);
@@ -59,7 +59,7 @@ function handleDelete(): express.RequestHandler {
 }
 
 function handleError(err: any, res: any) {
-  if (err instanceof TypeError) return res.status(400).send('internal error');
+  if (err instanceof TypeError) return res.status(500).send('INTERNAL ERROR');
   return res.status(400).send(err.message);
 }
 

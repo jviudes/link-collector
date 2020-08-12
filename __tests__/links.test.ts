@@ -18,7 +18,7 @@ test('Request url crawl with url not in the database', async () => {
 
 test('Request url crawl with invalid url', async () => {
   const response = await request(app).get('/').query({ url: '?test1.com' }).send().expect(400);
-  expect(response.text).toBe('invalid url');
+  expect(response.text).toBe('INVALID URL');
 });
 
 test('Request all urls', async () => {
@@ -31,12 +31,12 @@ test('Delete url record', async () => {
 
 test('Delete url record without query params', async () => {
   const response = await request(app).delete('/').send().expect(400);
-  expect(response.text).toBe('url must be specified');
+  expect(response.text).toBe('URL REQUIRED');
 });
 
 test('Test database connection error handle', async () => {
-  const response = await request(app).get('/').query({ url: 'https://www.test2.com.br' }).send().expect(400);
-  expect(response.text).toBe('internal error');
+  const response = await request(app).get('/').query({ url: 'https://www.test2.com.br' }).send().expect(500);
+  expect(response.text).toBe('INTERNAL ERROR');
 });
 
 //test crawlBackground function
