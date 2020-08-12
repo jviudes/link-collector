@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { crawl } from '../utils/crawler';
+import { isUrlValid } from '../utils/validator';
 import { dbLinks } from '../config';
 
 function handleCollector(): express.Router {
@@ -13,8 +14,10 @@ function handleGet(): express.RequestHandler {
   return async (req: express.Request, res: express.Response) => {
     try {
       if (req.query.url) {
+        if (!isUrlValid(<string>req.query.url)) throw new Error('invalid url');
+
         const linkHeader = await dbLinks.readLinkUrl(<string>req.query.url);
-        if (linkHeader.length == 0) {
+        if (linkHeader.length === 0) {
           //if there is no link record on the database crawl that link
           const urls = await crawl(<string>req.query.url);
           const document = {
@@ -55,10 +58,15 @@ function handleDelete(): express.RequestHandler {
   };
 }
 
+function handleError(err: any, res: any) {
+  if (err instanceof TypeError) return res.status(400).send('internal error');
+  return res.status(400).send(err.message);
+}
+
 async function crawlBackground(links: Array<any>) {
   for (const link of links) {
     const url = await dbLinks.readLinkUrl(link);
-    if (url.length == 0) {
+    if (url.length === 0) {
       const urls = await crawl(link);
       const document = {
         url: link,
@@ -69,9 +77,4 @@ async function crawlBackground(links: Array<any>) {
   }
 }
 
-function handleError(err: any, res: any) {
-  if (err.code === 'ENOTFOUND') return res.status(400).send('not a valid url');
-  return res.status(400).send(err.message);
-}
-
-export default handleCollector;
+export { handleCollector, crawlBackground };
