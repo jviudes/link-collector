@@ -1,21 +1,30 @@
 # link-collector app
 
- Service receives a url, strips the html and finds all urls contained in it. After that follows the urls found in the first step.
+Service receives a url go through the page's html and finds all urls contained in it. Repeats the process for the urls found in the first step.
 
-## Run the project
+## Setups
 
-    sudo docker-compose up
+To run the project it is assumed you have Docker installed alongside with Docker Compose. Instructions on how to install these requirements could be found here:
 
-## Methods
-### GET
-Return all urls saved in the database
+- https://docs.docker.com/engine/install/
+- https://docs.docker.com/compose/install/
 
-    localhost:3000/
-Return a specific url if it exists or start crawling and return found links
-    
-    localhost:3000/?url=https://example.com
+## Run
 
-### DELETE
-Delete specific url from the database
+Just run the command bellow on the project folder and the application will be up:
+  
+ sudo docker-compose up
 
-     localhost:3000/?url=https://example.com
+To bring the application down run:
+
+    sudo docker-compose down
+
+## About
+
+After the run command the application will be available on port 3000
+
+API documentation are available on the browser in:
+
+    localhost:3000/api-docs
+
+The routes can also be tested on the documentation page.
